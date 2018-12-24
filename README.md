@@ -67,29 +67,29 @@ p growi_client.attachment( path_exp: '/', attachment_name: 'LICENSE.txt' )
 
 ```ruby
 # pages list
-req = CPApiRequestPagesList.new path_exp: '/'
+req = GApiRequestPagesList.new path_exp: '/'
 p growi_client.request(req)
 ```
 
 ```ruby
 # pages get - path_exp
-req = CPApiRequestPagesList.new path_exp: '/'
+req = GApiRequestPagesList.new path_exp: '/'
 p growi_client.request(req)
 ```
 
 ```ruby
 # pages get - page_id
-req = CPApiRequestPagesGet.new page_id: growi_client.page_id(path_exp: '/')
+req = GApiRequestPagesGet.new page_id: growi_client.page_id(path_exp: '/')
 p growi_client.request(req)
 ```
 
 ```ruby
 # pages get - revision_id
-reqtmp = CPApiRequestPagesList.new path_exp: '/'
+reqtmp = GApiRequestPagesList.new path_exp: '/'
 ret = growi_client.request(reqtmp)
 path = ret.data[0].path
 revision_id = ret.data[0].revision._id
-req = CPApiRequestPagesGet.new path: path, revision_id: revision_id
+req = GApiRequestPagesGet.new path: path, revision_id: revision_id
 p growi_client.request(req)
 ```
 
@@ -97,7 +97,7 @@ p growi_client.request(req)
 # pages create
 test_page_path = '/tmp/growi-client test page'
 body = "# growi-client\n"
-req = CPApiRequestPagesCreate.new path: test_page_path,
+req = GApiRequestPagesCreate.new path: test_page_path,
         body: body
 p growi_client.request(req)
 ```
@@ -112,7 +112,7 @@ page_id = growi_client.page_id(path_exp: test_page_path)
 body = "# growi-client\n"
 test_cases.each do |grant|
   body = body + grant.to_s
-  req = CPApiRequestPagesUpdate.new page_id: page_id,
+  req = GApiRequestPagesUpdate.new page_id: page_id,
           body: body, grant: grant
   p growi_client.request(req)
 end
@@ -121,7 +121,7 @@ end
 ```ruby
 # pages seen
 page_id = growi_client.page_id(path_exp: '/')
-req = CPApiRequestPagesSeen.new page_id: page_id
+req = GApiRequestPagesSeen.new page_id: page_id
 p growi_client.request(req)
 ```
 
@@ -129,7 +129,7 @@ p growi_client.request(req)
 # likes add
 test_page_path = '/tmp/growi-client test page'
 page_id = growi_client.page_id(path_exp: test_page_path)
-req = CPApiRequestLikesAdd.new page_id: page_id
+req = GApiRequestLikesAdd.new page_id: page_id
 p growi_client.request(req)
 ```
 
@@ -137,14 +137,14 @@ p growi_client.request(req)
 # likes remove
 test_page_path = '/tmp/growi-client test page'
 page_id = growi_client.page_id(path_exp: test_page_path)
-req = CPApiRequestLikesRemove.new page_id: page_id
+req = GApiRequestLikesRemove.new page_id: page_id
 p growi_client.request(req)
 ```
 
 ```ruby
 # update post
 test_page_path = '/tmp/growi-client test page'
-req = CPApiRequestPagesUpdatePost.new path: test_page_path
+req = GApiRequestPagesUpdatePost.new path: test_page_path
 p growi_client.request(req)
 ```
 
@@ -153,7 +153,7 @@ p growi_client.request(req)
 # attachments list
 test_page_path = '/tmp/growi-client test page'
 page_id = growi_client.page_id(path_exp: test_page_path)
-req = CPApiRequestAttachmentsList.new page_id: page_id
+req = GApiRequestAttachmentsList.new page_id: page_id
 p growi_client.request(req)
 ```
 
@@ -161,7 +161,7 @@ p growi_client.request(req)
 # attachments add
 test_page_path = '/tmp/growi-client test page'
 page_id = growi_client.page_id(path_exp: test_page_path)
-req = CPApiRequestAttachmentsAdd.new page_id: page_id,
+req = GApiRequestAttachmentsAdd.new page_id: page_id,
                                      file: File.new('LICENSE.txt')
 p growi_client.request(req)
 ```
@@ -170,10 +170,10 @@ p growi_client.request(req)
 # attachments remove
 test_page_path = '/tmp/growi-client test page'
 page_id = growi_client.page_id(path_exp: test_page_path)
-reqtmp = CPApiRequestAttachmentsList.new page_id: page_id
+reqtmp = GApiRequestAttachmentsList.new page_id: page_id
 ret = growi_client.request(reqtmp)
 attachment_id = ret.data[0]._id
-req = CPApiRequestAttachmentsRemove.new attachment_id: attachment_id
+req = GApiRequestAttachmentsRemove.new attachment_id: attachment_id
 p growi_client.request(req)
 ```
 
@@ -190,7 +190,7 @@ growi_client = GrowiClient.new(growi_url: ENV['GROWI_URL'], access_token: ENV['G
 p growi_client.page_exist?( path_exp: '/' ) ? '/ exist' : '/ not exist'
 
 # Create page whose path is '/tmp'
-req = CPApiRequestPagesCreate.new path: '/tmp', body: 'tmp'
+req = GApiRequestPagesCreate.new path: '/tmp', body: 'tmp'
 p growi_client.request(req)
 ```
 
