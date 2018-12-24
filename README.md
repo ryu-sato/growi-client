@@ -1,8 +1,16 @@
-[![wercker status](https://app.wercker.com/status/8d49d851e9cdf0c7e1b7c840cc2fe6ad/s/master "wercker status")](https://app.wercker.com/project/byKey/8d49d851e9cdf0c7e1b7c840cc2fe6ad)
+[![wercker status](https://app.wercker.com/status/837aadfe3b9e25cf5aacd36ae2bdc6a4/s/master "wercker status")](https://app.wercker.com/project/byKey/837aadfe3b9e25cf5aacd36ae2bdc6a4)
 
 # growi-client -- client of growi with use API
 
 A client of growi with use API.
+
+## Compatibility
+
+growi-client is passed the test of these Growi versions.
+
+|growi-client|Growi|
+| --- | --- |
+|0.9.0|3.1.12|
 
 ## Installation
 
@@ -211,7 +219,3 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## Code of Conduct
 
 Everyone interacting in the Growi::Client project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/ryu-satgrowiwi-client/blob/master/CODE_OF_CONDUCT.md).
-
-## ToDo
-
-- [x] Support growi with basic Authentication
