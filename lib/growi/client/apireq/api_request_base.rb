@@ -17,7 +17,7 @@ class CPInvalidRequest
 end
 
 # APIリクエストの応答基本クラス
-class CPApiReturn
+class GApiReturn
   attr_accessor :ok, :data
 
   # Constractor
@@ -33,7 +33,7 @@ class CPApiReturn
 end
 
 # APIリクエストの基本クラス
-class CPApiRequestBase
+class GApiRequestBase
   METHOD_GET = "GET"
   METHOD_POST = "POST"
   attr_reader :entry_point, :method, :param
@@ -75,7 +75,7 @@ class CPApiRequestBase
   # リクエストを実行する
   # @param  [String] entry_point APIのエントリーポイントとなるURL（ex. http://localhost:3000/_api/pages.list）
   # @param  [Hash] rest_client_param RestClientのパラメータ
-  # @return [String] リクエスト実行結果（CPApiReturnオブジェクト）
+  # @return [String] リクエスト実行結果（GApiReturnオブジェクト）
   def execute(entry_point, rest_client_param: {})
 
     if invalid?
@@ -91,7 +91,7 @@ class CPApiRequestBase
     end
     ret_json = RestClient::Request.execute params
     ret = JSON.parse(ret_json)
-    return CPApiReturn.new(ok: ret['ok'], data: ret.reject { |k,v| k == 'ok' })
+    return GApiReturn.new(ok: ret['ok'], data: ret.reject { |k,v| k == 'ok' })
   end
 
 protected

@@ -33,7 +33,7 @@ class GrowiClient
   # @param [String] path_exp ページパス
   # @return [String] ページID
   def page_id(path_exp: nil)
-    ret = request(CPApiRequestPagesList.new path_exp: path_exp)
+    ret = request(GApiRequestPagesList.new path_exp: path_exp)
     return nil if (ret.kind_of? CPInvalidRequest || ret.data.nil?)
     return ret.data.find { |page| URI.unescape(page.path) == path_exp }&.id
   end
@@ -50,7 +50,7 @@ class GrowiClient
   # @param [String] attachment_name 添付ファイル名
   # @return [true/false] 添付ファイルの存在
   def attachment_exist?(path_exp: nil, attachment_name: nil)
-    ret = request(CPApiRequestAttachmentsList.new page_id: page_id(path_exp: path_exp))
+    ret = request(GApiRequestAttachmentsList.new page_id: page_id(path_exp: path_exp))
     return ret&.ok && ret&.data&.find { |a| a.originalName == attachment_name } != nil
   end
 
@@ -58,7 +58,7 @@ class GrowiClient
   # @param  [String] path_exp ページパス（正規表現）
   # @return [String] attachment's file name
   def attachment_id(path_exp: nil, attachment_name: nil)
-    ret = request(CPApiRequestAttachmentsList.new page_id: page_id(path_exp: path_exp))
+    ret = request(GApiRequestAttachmentsList.new page_id: page_id(path_exp: path_exp))
     return ret&.data&.find { |a| a.originalName == attachment_name }&._id
   end
 
@@ -66,7 +66,7 @@ class GrowiClient
   # @param  [String] path_exp ページパス（正規表現）
   # @return [String] attachment's file name
   def attachment(path_exp: nil, attachment_name: nil)
-    ret = request(CPApiRequestAttachmentsList.new page_id: page_id(path_exp: path_exp))
+    ret = request(GApiRequestAttachmentsList.new page_id: page_id(path_exp: path_exp))
     return ret&.data&.find { |a| a.originalName == attachment_name }
   end
 

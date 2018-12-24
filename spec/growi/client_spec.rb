@@ -18,7 +18,7 @@ RSpec.describe Growi::Client do
   describe '# API related Growi pages :' do
     # Test for function to get page list
     it "get list of page" do
-      req = CPApiRequestPagesList.new path_exp: '/'
+      req = GApiRequestPagesList.new path_exp: '/'
       expect(growi_client.request(req).ok).to eq true
     end
   
@@ -26,18 +26,18 @@ RSpec.describe Growi::Client do
     it "get page" do
       aggregate_failures 'some pattern to get page' do
         # get page specified path
-        req = CPApiRequestPagesGet.new path: '/'
+        req = GApiRequestPagesGet.new path: '/'
         expect(growi_client.request(req).ok).to eq true
   
         # get page specified page_id
-        req = CPApiRequestPagesGet.new page_id: growi_client.page_id(path_exp: '/')
+        req = GApiRequestPagesGet.new page_id: growi_client.page_id(path_exp: '/')
         expect(growi_client.request(req).ok).to eq true
   
         # get page specified path and revision_id
-        reqtmp = CPApiRequestPagesList.new path_exp: '/'
+        reqtmp = GApiRequestPagesList.new path_exp: '/'
         ret = growi_client.request(reqtmp)
         page = ret&.data&.find{ |page| page.path == '/' }
-        req = CPApiRequestPagesGet.new path: page.path, revision_id: page.revision._id
+        req = GApiRequestPagesGet.new path: page.path, revision_id: page.revision._id
         expect(growi_client.request(req).ok).to eq true
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe Growi::Client do
     # Test for function to create page
     it "create page" do
       body = "# growi-client\n"
-      req = CPApiRequestPagesCreate.new path: test_page_path,
+      req = GApiRequestPagesCreate.new path: test_page_path,
               body: body
       expect(growi_client.request(req).ok).to eq true
     end
@@ -59,7 +59,7 @@ RSpec.describe Growi::Client do
       body = "# growi-client\n"
       test_cases.each do |grant| 
         body = body + grant.to_s
-        req = CPApiRequestPagesUpdate.new page_id: page_id,
+        req = GApiRequestPagesUpdate.new page_id: page_id,
                 body: body, grant: grant
         expect(growi_client.request(req).ok).to eq true
       end
@@ -68,27 +68,27 @@ RSpec.describe Growi::Client do
     # Test for function to get the page list, which is seen
     it "get seen pages" do
       page_id = growi_client.page_id(path_exp: test_page_path)
-      req = CPApiRequestPagesSeen.new page_id: page_id
+      req = GApiRequestPagesSeen.new page_id: page_id
       expect(growi_client.request(req).ok).to eq true
     end
   
     # Test for function to react LIKE
     it "add LIKE reaction" do
       page_id = growi_client.page_id(path_exp: test_page_path)
-      req = CPApiRequestLikesAdd.new page_id: page_id
+      req = GApiRequestLikesAdd.new page_id: page_id
       expect(growi_client.request(req).ok).to eq true
     end
   
     # Test for function to cancel LIKE reaction
     it "remove LIKE reaction" do
       page_id = growi_client.page_id(path_exp: test_page_path)
-      req = CPApiRequestLikesRemove.new page_id: page_id
+      req = GApiRequestLikesRemove.new page_id: page_id
       expect(growi_client.request(req).ok).to eq true
     end
   
     # Test for function to set update post
     it "update post" do
-      req = CPApiRequestPagesUpdatePost.new path: test_page_path
+      req = GApiRequestPagesUpdatePost.new path: test_page_path
       expect(growi_client.request(req).ok).to eq true
     end
 
@@ -111,7 +111,7 @@ RSpec.describe Growi::Client do
     # Test for function to get attachment list
     it "get attachments list" do
       page_id = growi_client.page_id(path_exp: test_page_path)
-      req = CPApiRequestAttachmentsList.new page_id: page_id
+      req = GApiRequestAttachmentsList.new page_id: page_id
       expect(growi_client.request(req).ok).to eq true
     end
  
@@ -129,7 +129,7 @@ RSpec.describe Growi::Client do
 
         File.open(attachment_file_name, 'r') do |tmp_file|
           page_id = growi_client.page_id(path_exp: test_page_path)
-          req = CPApiRequestAttachmentsAdd.new page_id: page_id, file: tmp_file
+          req = GApiRequestAttachmentsAdd.new page_id: page_id, file: tmp_file
           expect(growi_client.request(req).ok).to eq true
         end
       end
@@ -150,10 +150,10 @@ RSpec.describe Growi::Client do
     # Test for function to remove attachment file
     it "remove attachment" do
       page_id = growi_client.page_id(path_exp: test_page_path)
-      reqtmp = CPApiRequestAttachmentsList.new page_id: page_id
+      reqtmp = GApiRequestAttachmentsList.new page_id: page_id
       ret = growi_client.request(reqtmp)
       attachment_id = ret.data[0]._id
-      req = CPApiRequestAttachmentsRemove.new attachment_id: attachment_id
+      req = GApiRequestAttachmentsRemove.new attachment_id: attachment_id
       expect(growi_client.request(req).ok).to eq true
     end
   end
