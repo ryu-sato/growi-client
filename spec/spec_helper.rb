@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "crowi-client"
+require "growi-client"
 require "rspec/json_matcher"
 require "json"
 

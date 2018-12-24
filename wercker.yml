@@ -76,8 +76,8 @@ build:
         - script:
             name: "Export environment variables"
             code: |
-              export CROWI_URL=$GROWI_URL
-              export CROWI_ACCESS_TOKEN=$APITOKEN
+              export GROWI_URL=$GROWI_URL
+              export GROWI_ACCESS_TOKEN=$APITOKEN
 
         - script:
             name: "View environment variables"

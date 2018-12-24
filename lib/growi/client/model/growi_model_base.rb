@@ -1,5 +1,5 @@
-# Crowi model base class
-class CrowiModelBase
+# Growi model base class
+class GrowiModelBase
 
   # Constractor
   def initialize(params = {})

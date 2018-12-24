@@ -1,7 +1,7 @@
-require 'crowi/client/model/crowi_model'
+require 'growi/client/model/growi_model'
 
-# Crowi Attachment model class
-class CrowiAttachment < CrowiModelBase
+# Growi Attachment model class
+class GrowiAttachment < GrowiModelBase
   attr_reader :_id, :fileFormat, :fileName, :originalName, :filePath,
               :creator, :page, :__v, :createdAt, :fileSize, :url
 
@@ -19,14 +19,14 @@ class CrowiAttachment < CrowiModelBase
       raise ArgumentError.new('Parameters id is required.')
     end
 
-    CrowiModelFactory.instance.register({
-      attachment_creator:   Proc.new { |param| param != nil && param.is_a?(String) ? param : CrowiUser.new(param) },
+    GrowiModelFactory.instance.register({
+      attachment_creator:   Proc.new { |param| param != nil && param.is_a?(String) ? param : GrowiUser.new(param) },
       attachment_createdAt: Proc.new { |date_str|
                               date_str != nil && DateTime.parse(date_str) },
     })
     maked_params = {}
     params.each do |k,v|
-      maker = CrowiModelFactory.instance.maker('attachment_' + k.to_s)
+      maker = GrowiModelFactory.instance.maker('attachment_' + k.to_s)
       maked_params[k] = maker.call(v)
     end
     super(maked_params)

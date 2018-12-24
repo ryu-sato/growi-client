@@ -1,1 +1,0 @@
-require 'crowi/client/client'

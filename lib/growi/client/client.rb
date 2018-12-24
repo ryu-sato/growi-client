@@ -3,21 +3,21 @@ require 'json'
 require 'yaml'
 require 'uri'
 
-require 'crowi/client/apireq/api_request_pages'
-require 'crowi/client/apireq/api_request_attachments'
+require 'growi/client/apireq/api_request_pages'
+require 'growi/client/apireq/api_request_attachments'
 
-# Crowi のクライアントクラス
-class CrowiClient
+# Growi のクライアントクラス
+class GrowiClient
 
   # コンストラクタ
-  def initialize(crowi_url: '', access_token: '', rest_client_param: {})
-    raise ArgumentError, 'Config `crowi_url` is required.'    if crowi_url.empty?
+  def initialize(growi_url: '', access_token: '', rest_client_param: {})
+    raise ArgumentError, 'Config `growi_url` is required.'    if growi_url.empty?
     raise ArgumentError, 'Config `access_token` is required.' if access_token.empty?
 
-    @crowi_url = crowi_url
+    @growi_url = growi_url
     @access_token = access_token
     @rest_client_param = rest_client_param
-    @cp_entry_point = URI.join(crowi_url, '/_api/').to_s
+    @cp_entry_point = URI.join(growi_url, '/_api/').to_s
   end
 
   # APIリクエストを送信する

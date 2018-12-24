@@ -1,0 +1,1 @@
+require 'growi/client/client'
