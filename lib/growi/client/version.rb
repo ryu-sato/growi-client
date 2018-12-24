@@ -1,5 +1,5 @@
 module Growi
   module Client
-    VERSION = "0.1.4"
+    VERSION = "0.9.0"
   end
 end
