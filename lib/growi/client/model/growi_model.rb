@@ -1,15 +1,15 @@
 require 'singleton'
 
-require 'crowi/client/model/crowi_model_base'
-require 'crowi/client/model/crowi_page'
-require 'crowi/client/model/crowi_page_revision'
-require 'crowi/client/model/crowi_user'
-require 'crowi/client/model/crowi_attachment'
+require 'growi/client/model/growi_model_base'
+require 'growi/client/model/growi_page'
+require 'growi/client/model/growi_page_revision'
+require 'growi/client/model/growi_user'
+require 'growi/client/model/growi_attachment'
 
-# Crowi model factory class
+# Growi model factory class
 # @abstract include singleton class
 # @attr_reader makers Model maker list
-class CrowiModelFactory
+class GrowiModelFactory
   include Singleton
   attr_reader :makers
 

@@ -1,7 +1,7 @@
 require_relative 'api_request_base'
 
 # 添付ファイル一覧リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/attachment.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/attachment.js
 class CPApiRequestAttachmentsList < CPApiRequestBase
 
   # コンストラクタ
@@ -27,7 +27,7 @@ class CPApiRequestAttachmentsList < CPApiRequestBase
     end
     attachments = []
     ret['attachments'].each do |attachment|
-      attachments.push(CrowiAttachment.new(attachment))
+      attachments.push(GrowiAttachment.new(attachment))
     end
     return CPApiReturn.new(ok: ret['ok'], data: attachments)
   end
@@ -45,7 +45,7 @@ protected
 end
 
 # 添付ファイル追加リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/attachment.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/attachment.js
 class CPApiRequestAttachmentsAdd < CPApiRequestBase
 
   # コンストラクタ
@@ -78,7 +78,7 @@ class CPApiRequestAttachmentsAdd < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['page']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
 protected
@@ -95,7 +95,7 @@ end
 
 
 # 添付ファイル削除リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/attachment.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/attachment.js
 class CPApiRequestAttachmentsRemove < CPApiRequestBase
 
   # コンストラクタ

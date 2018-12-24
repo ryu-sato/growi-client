@@ -1,8 +1,8 @@
 require_relative 'api_request_base'
-require 'crowi/client/model/crowi_page'
+require 'growi/client/model/growi_page'
 
 # ページ一覧リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 class CPApiRequestPagesList < CPApiRequestBase
 
   # コンストラクタ
@@ -31,7 +31,7 @@ class CPApiRequestPagesList < CPApiRequestBase
     end
     pages = []
     ret['pages'].each do |page|
-      pages.push(CrowiPage.new(page))
+      pages.push(GrowiPage.new(page))
     end
     return CPApiReturn.new(ok: ret['ok'], data: pages)
   end
@@ -54,7 +54,7 @@ end
 
 
 # ページ取得リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 class CPApiRequestPagesGet < CPApiRequestBase
 
   # コンストラクタ
@@ -81,7 +81,7 @@ class CPApiRequestPagesGet < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['page']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
 protected
@@ -99,7 +99,7 @@ end
 
 
 # ページ作成リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 class CPApiRequestPagesCreate < CPApiRequestBase
 
   # コンストラクタ
@@ -129,7 +129,7 @@ class CPApiRequestPagesCreate < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['page']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
 protected
@@ -146,7 +146,7 @@ protected
 end
 
 # ページ更新リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 class CPApiRequestPagesUpdate < CPApiRequestBase
 
   # コンストラクタ
@@ -176,7 +176,7 @@ class CPApiRequestPagesUpdate < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['page']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
 protected
@@ -193,7 +193,7 @@ protected
 end
 
 # ページ閲覧済マークを付与リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 # @note 詳細不明
 class CPApiRequestPagesSeen < CPApiRequestBase
 
@@ -222,7 +222,7 @@ class CPApiRequestPagesSeen < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['seenUser']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['seenUser']))
   end
 
 protected
@@ -239,7 +239,7 @@ protected
 end
 
 # ライクページ指定リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 class CPApiRequestLikesAdd < CPApiRequestBase
 
   # コンストラクタ
@@ -267,7 +267,7 @@ class CPApiRequestLikesAdd < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['page']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
 protected
@@ -284,7 +284,7 @@ protected
 end
 
 # ライクページ指定解除リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 class CPApiRequestLikesRemove < CPApiRequestBase
 
   # コンストラクタ
@@ -312,7 +312,7 @@ class CPApiRequestLikesRemove < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['page']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
 protected
@@ -329,7 +329,7 @@ protected
 end
 
 # 更新ページ一覧リクエスト用クラス
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 # @note notification for 3rd party tool (like Slack)
 class CPApiRequestPagesUpdatePost < CPApiRequestBase
 
@@ -357,7 +357,7 @@ class CPApiRequestPagesUpdatePost < CPApiRequestBase
     end
     posts = []
     ret['updatePost'].each do |post|
-      pages.push(CrowiPage.new(post))
+      pages.push(GrowiPage.new(post))
     end
     return CPApiReturn.new(ok: ret['ok'], data: posts)
   end
@@ -376,7 +376,7 @@ protected
 end
 
 # ページ削除リクエスト用クラス（API利用不可）
-# @ref https://github.com/crowi/crowi/blob/master/lib/routes/page.js
+# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
 class CPApiRequestPagesRemove < CPApiRequestBase
 
   # コンストラクタ
@@ -403,7 +403,7 @@ class CPApiRequestPagesRemove < CPApiRequestBase
     if (ret['ok'] == false)
       return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return CPApiReturn.new(ok: ret['ok'], data: CrowiPage.new(ret['page']))
+    return CPApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
 protected

@@ -1,7 +1,7 @@
-require 'crowi/client/model/crowi_model'
+require 'growi/client/model/growi_model'
 
-# Crowi Page revision model class
-class CrowiPageRevision < CrowiModelBase
+# Growi Page revision model class
+class GrowiPageRevision < GrowiModelBase
   attr_reader :_id, :author, :body, :path, :__v, :createdAt, :format
 
   # Constractor
@@ -18,13 +18,13 @@ class CrowiPageRevision < CrowiModelBase
       raise ArgumentError.new('Parameters _id and path are required.')
     end
 
-    CrowiModelFactory.instance.register({
+    GrowiModelFactory.instance.register({
       page_revision_createdAt: Proc.new { |date_str|
                                           date_str != nil && DateTime.parse(date_str) },
     })
     maked_params = {}
     params.each do |k,v|
-      maker = CrowiModelFactory.instance.maker('page_revision_' + k.to_s)
+      maker = GrowiModelFactory.instance.maker('page_revision_' + k.to_s)
       maked_params[k] = maker.call(v)
     end
     super(maked_params)

@@ -1,4 +1,4 @@
-module Crowi
+module Growi
   module Client
     VERSION = "0.1.4"
   end

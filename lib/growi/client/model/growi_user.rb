@@ -1,7 +1,7 @@
-require 'crowi/client/model/crowi_model'
+require 'growi/client/model/growi_model'
 
-# Crowi User model class
-class CrowiUser < CrowiModelBase
+# Growi User model class
+class GrowiUser < GrowiModelBase
   attr_reader :_id, :email, :username, :name,
               :admin, :createdAt, :status, :lang, :isGravatarEnabled
 
@@ -19,13 +19,13 @@ class CrowiUser < CrowiModelBase
       raise ArgumentError.new('Parameters id and email and name are required.')
     end
 
-    CrowiModelFactory.instance.register({
+    GrowiModelFactory.instance.register({
       user_createdAt: Proc.new { |date_str|
                         date_str != nil && DateTime.parse(date_str) },
     })
     maked_params = {}
     params.each do |k,v|
-      maker = CrowiModelFactory.instance.maker('user_' + k.to_s)
+      maker = GrowiModelFactory.instance.maker('user_' + k.to_s)
       maked_params[k] = maker.call(v)
     end
     super(maked_params)

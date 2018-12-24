@@ -1,7 +1,7 @@
-require 'crowi/client/model/crowi_model'
+require 'growi/client/model/growi_model'
 
-# Crowi Page model class
-class CrowiPage < CrowiModelBase
+# Growi Page model class
+class GrowiPage < GrowiModelBase
   GRANT_PUBLIC     = 1.freeze
   GRANT_RESTRICTED = 2.freeze
   GRANT_SPECIFIED  = 3.freeze
@@ -34,16 +34,16 @@ class CrowiPage < CrowiModelBase
     end
 
     # @note Parameters lastUpdateUser and creator have two patterns ID only or Object.
-    CrowiModelFactory.instance.register({
+    GrowiModelFactory.instance.register({
       page_updatedAt:      Proc.new { |str| str != nil && DateTime.parse(str) },
-      page_lastUpdateUser: Proc.new { |param| param != nil && param.is_a?(String) ? param : CrowiUser.new(param) },
-      page_creator:        Proc.new { |param| param != nil && param.is_a?(String) ? param : CrowiUser.new(param) },
+      page_lastUpdateUser: Proc.new { |param| param != nil && param.is_a?(String) ? param : GrowiUser.new(param) },
+      page_creator:        Proc.new { |param| param != nil && param.is_a?(String) ? param : GrowiUser.new(param) },
       page_createdAt:      Proc.new { |str| str != nil && DateTime.parse(str) },
-      page_revision:       Proc.new { |param| param != nil && CrowiPageRevision.new(param) },
+      page_revision:       Proc.new { |param| param != nil && GrowiPageRevision.new(param) },
     })
     maked_params = {}
     params.each do |k,v|
-      maker = CrowiModelFactory.instance.maker('page_' + k.to_s)
+      maker = GrowiModelFactory.instance.maker('page_' + k.to_s)
       maked_params[k] = maker.call(v)
     end
     super(maked_params)
