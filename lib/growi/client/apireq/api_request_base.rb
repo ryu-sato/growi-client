@@ -92,7 +92,6 @@ class GApiRequestBase
     end
     ret_json = RestClient::Request.execute params
     ret = JSON.parse(ret_json)
-p "params: #{params}, ret_json: #{ret_json}, ret: #{ret}"
     return GApiReturn.new(ok: ret['ok'], data: ret.reject { |k,v| k == 'ok' })
   end
 

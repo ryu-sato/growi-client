@@ -60,7 +60,6 @@ RSpec.describe Growi::Client do
         # get page specified path
         req = GApiRequestPagesGet.new path: test_page_path
         ret = growi_client.request(req)
-        p "ret: ", ret
 
         body = body + grant.to_s
         req = GApiRequestPagesUpdate.new page_id: ret.data._id, revision_id: ret.data.revision._id,
