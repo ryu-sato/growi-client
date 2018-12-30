@@ -15,13 +15,12 @@ class GrowiUser < GrowiModelBase
     }
 
     params = init_params.merge(params.map { |k,v| [k.to_sym, v] }.to_h)
-    if (params[:_id] == nil || params[:email] == nil || params[:username] == nil)
-      raise ArgumentError.new('Parameters id and email and name are required.')
+    if (params[:_id].nil?)
+      raise ArgumentError.new('Parameter _id is required.')
     end
 
     GrowiModelFactory.instance.register({
-      user_createdAt: Proc.new { |date_str|
-                        date_str != nil && DateTime.parse(date_str) },
+      user_createdAt: Proc.new { |date_str| !date_str.nil? && date_str != "" ? DateTime.parse(date_str) : "" },
     })
     maked_params = {}
     params.each do |k,v|

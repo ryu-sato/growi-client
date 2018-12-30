@@ -11,8 +11,8 @@ class GrowiClient
 
   # コンストラクタ
   def initialize(growi_url: '', access_token: '', rest_client_param: {})
-    raise ArgumentError, 'Config `growi_url` is required.'    if growi_url.empty?
-    raise ArgumentError, 'Config `access_token` is required.' if access_token.empty?
+    raise ArgumentError, 'Config `growi_url` is required.'    if growi_url.nil?
+    raise ArgumentError, 'Config `access_token` is required.' if access_token.nil?
 
     @growi_url = growi_url
     @access_token = access_token
@@ -34,8 +34,8 @@ class GrowiClient
   # @return [String] ページID
   def page_id(path_exp: nil)
     ret = request(GApiRequestPagesList.new path_exp: path_exp)
-    return nil if (ret.kind_of? CPInvalidRequest || ret.data.nil?)
-    return ret.data.find { |page| URI.unescape(page.path) == path_exp }&.id
+    return nil if (ret.kind_of? GCInvalidRequest || ret.data.nil?)
+    return ret.data.find { |page| URI.unescape(page.path) == path_exp }&._id
   end
 
   # ページが存在するか調べる

@@ -15,14 +15,13 @@ class GrowiAttachment < GrowiModelBase
     }
 
     params = init_params.merge(params.map { |k,v| [k.to_sym, v] }.to_h)
-    if (params[:_id] == nil)
-      raise ArgumentError.new('Parameters id is required.')
+    if (params[:_id].nil?)
+      raise ArgumentError.new('Parameter _id is required.')
     end
 
     GrowiModelFactory.instance.register({
-      attachment_creator:   Proc.new { |param| param != nil && param.is_a?(String) ? param : GrowiUser.new(param) },
-      attachment_createdAt: Proc.new { |date_str|
-                              date_str != nil && DateTime.parse(date_str) },
+      attachment_creator:   Proc.new { |param| !param.nil? && param.is_a?(String) ? param : GrowiUser.new(param) },
+      attachment_createdAt: Proc.new { |date_str| !date_str.nil? && date_str != "" ? DateTime.parse(date_str) : "" },
     })
     maked_params = {}
     params.each do |k,v|

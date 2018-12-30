@@ -1,11 +1,12 @@
 # APIリクエストのバリデーションエラー
 # @note rescue する必要はないので Exception クラスは継承しない
-class CPInvalidRequest
-  attr_reader :msg
+class GCInvalidRequest
+  attr_reader :ok, :msg
 
   # コンストラクタ
   # @param [String] msg エラーメッセージ（原因と対策が分かるとよい）
   def initialize(msg)
+    @ok = false
     @msg = msg
   end
 
@@ -91,15 +92,16 @@ class GApiRequestBase
     end
     ret_json = RestClient::Request.execute params
     ret = JSON.parse(ret_json)
+p "params: #{params}, ret_json: #{ret_json}, ret: #{ret}"
     return GApiReturn.new(ok: ret['ok'], data: ret.reject { |k,v| k == 'ok' })
   end
 
 protected
 
   # バリデーションエラーを取得する
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
-    return CPInvalidRequest "Invalid API request.";
+    return GCInvalidRequest "Invalid API request.";
   end
 
 end
