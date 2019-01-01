@@ -23,7 +23,7 @@ class GApiRequestAttachmentsList < GApiRequestBase
     params = { method: :get, url: entry_point, headers: { params: @param } }.merge(rest_client_param)
     ret = JSON.parse RestClient::Request.execute params
     if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
     attachments = []
     ret['attachments'].each do |attachment|
@@ -35,10 +35,10 @@ class GApiRequestAttachmentsList < GApiRequestBase
 protected
 
   # バリデーションエラーを取得する
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:page_id])
-      CPInvalidRequest.new 'Parameter page_id is required.'
+      GCInvalidRequest.new 'Parameter page_id is required.'
     end
   end
 
@@ -76,7 +76,7 @@ class GApiRequestAttachmentsAdd < GApiRequestBase
     }.merge(rest_client_param)
     ret = JSON.parse RestClient::Request.execute params
     if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
     return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
@@ -84,10 +84,10 @@ class GApiRequestAttachmentsAdd < GApiRequestBase
 protected
 
   # バリデーションエラーを取得する
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:file] && @param[:page_id])
-      CPInvalidRequest.new 'Parameters file and page_id are required.'
+      GCInvalidRequest.new 'Parameters file and page_id are required.'
     end
   end
 
@@ -121,7 +121,7 @@ class GApiRequestAttachmentsRemove < GApiRequestBase
              }.merge(rest_client_param)
     ret = JSON.parse RestClient::Request.execute params
     if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
     return GApiReturn.new(ok: ret['ok'], data: nil)
   end
@@ -129,10 +129,10 @@ class GApiRequestAttachmentsRemove < GApiRequestBase
 protected
 
   # バリデーションエラーを取得する
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:attachment_id])
-      CPInvalidRequest.new 'Parameter attachment_id is required.'
+      GCInvalidRequest.new 'Parameter attachment_id is required.'
     end
   end
 

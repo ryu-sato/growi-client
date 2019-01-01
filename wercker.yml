@@ -27,7 +27,7 @@ build:
               done
 
         - internal/docker-run:
-            image: weseek/growi:3.1.12
+            image: weseek/growi:3.3.3
             name: growi
             env: >
               MONGO_URI=mongodb://$MONGO_PORT_27017_TCP_ADDR:$MONGO_PORT_27017_TCP_PORT/growi

@@ -10,6 +10,7 @@ growi-client is passed the test of these Growi versions.
 
 |growi-client|Growi|
 | --- | --- |
+|1.0.0|3.3.3|
 |0.9.0|3.1.12|
 
 ## Installation
@@ -219,3 +220,7 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## Code of Conduct
 
 Everyone interacting in the Growi::Client project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/ryu-satgrowiwi-client/blob/master/CODE_OF_CONDUCT.md).
+
+## TODO
+
+- [ ] pagenation に対応する

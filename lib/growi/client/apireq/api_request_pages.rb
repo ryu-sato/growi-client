@@ -1,8 +1,9 @@
 require_relative 'api_request_base'
 require 'growi/client/model/growi_page'
+require 'growi/client/logger'
 
 # ページ一覧リクエスト用クラス
-# @ref https://github.com/growi/growi/blob/master/lib/routes/page.js
+# @ref https://github.com/weseek/growi/blob/master/src/server/routes/page.js
 class GApiRequestPagesList < GApiRequestBase
 
   # コンストラクタ
@@ -14,6 +15,7 @@ class GApiRequestPagesList < GApiRequestBase
   end
 
   # リクエストを実行する
+  # [TODO] pagination に対応する
   # @override
   # @param  [String] entry_point APIのエントリーポイントとなるURL（ex. http://localhost:3000/_api/pages.list）
   # @param  [Hash] rest_client_param RestClientのパラメータ
@@ -25,28 +27,44 @@ class GApiRequestPagesList < GApiRequestBase
     end
 
     params = { method: :get, url: entry_point, headers: { params: @param } }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
-    pages = []
-    ret['pages'].each do |page|
-      pages.push(GrowiPage.new(page))
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return GApiReturn.new(ok: ret['ok'], data: pages)
+
+    begin
+      pages = []
+      ret['pages'].each do |page|
+        pages.push(GrowiPage.new(page))
+      end
+      return GApiReturn.new(ok: ret['ok'], data: pages)
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Fail to parse: #{e}"
+    end
   end
 
 protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:path] || @param[:user])
-      return CPInvalidRequest.new 'Parameter path or user is required.'
+      return GCInvalidRequest.new 'Parameter path or user is required.'
     end
     if (@param[:path] && @param[:user])
-      return CPInvalidRequest.new 'Parameter path and user can not be specified both.'
+      return GCInvalidRequest.new 'Parameter path and user can not be specified both.'
     end
   end
 
@@ -76,11 +94,23 @@ class GApiRequestPagesGet < GApiRequestBase
     if invalid?
       return validation_msg
     end
+
     params = { method: :get, url: entry_point, headers: { params: @param } }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    end
+
     return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
@@ -88,10 +118,10 @@ protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:path] || @param[:page_id]) 
-      return CPInvalidRequest.new 'Parameter path or page_id is required.'
+      return GCInvalidRequest.new 'Parameter path or page_id is required.'
     end
   end
 
@@ -125,10 +155,21 @@ class GApiRequestPagesCreate < GApiRequestBase
                payload: @param.to_json,
                headers: { content_type: :json, accept: :json }
              }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    end
+
     return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
@@ -136,10 +177,10 @@ protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:body] && @param[:path]) 
-      return CPInvalidRequest.new 'Parameters body and path are required.'
+      return GCInvalidRequest.new 'Parameters body and path are required.'
     end
   end
 
@@ -172,10 +213,21 @@ class GApiRequestPagesUpdate < GApiRequestBase
                payload: @param.to_json,
                headers: { content_type: :json, accept: :json }
              }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    end
+
     return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
@@ -183,10 +235,10 @@ protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
-    if ! (@param[:page_id] && @param[:body]) 
-      return CPInvalidRequest.new 'Parameters page_id and body are required.'
+    if ! (@param[:page_id] && @param[:revision_id] && @param[:body])
+      return GCInvalidRequest.new 'Parameters page_id, revision_id and body are required.'
     end
   end
 
@@ -218,21 +270,40 @@ class GApiRequestPagesSeen < GApiRequestBase
                payload: @param.to_json,
                headers: { content_type: :json, accept: :json }
              }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
-    return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['seenUser']))
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    end
+
+    begin
+      users = ret['seenUser'].map do |user|
+        user.is_a?(String) ? user : GrowiUser.new(user)
+      end
+      return GApiReturn.new(ok: ret['ok'], data: users)
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Fail to parse: #{e}"
+    end
   end
 
 protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:page_id]) 
-      return CPInvalidRequest.new 'Parameter page_id required.'
+      return GCInvalidRequest.new 'Parameter page_id required.'
     end
   end
 
@@ -259,14 +330,26 @@ class GApiRequestLikesAdd < GApiRequestBase
     if invalid?
       return validation_msg
     end
+
     params = { method: :post, url: entry_point,
                payload: @param.to_json,
                headers: { content_type: :json, accept: :json }
              }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    end
+
     return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
@@ -274,10 +357,10 @@ protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:page_id]) 
-      return CPInvalidRequest.new 'Parameter page_id required.'
+      return GCInvalidRequest.new 'Parameter page_id required.'
     end
   end
 
@@ -308,10 +391,21 @@ class GApiRequestLikesRemove < GApiRequestBase
                payload: @param.to_json,
                headers: { content_type: :json, accept: :json }
              }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    end
+
     return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
@@ -319,10 +413,10 @@ protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:page_id]) 
-      return CPInvalidRequest.new 'Parameter page_id required.'
+      return GCInvalidRequest.new 'Parameter page_id required.'
     end
   end
 
@@ -351,25 +445,41 @@ class GApiRequestPagesUpdatePost < GApiRequestBase
       return validation_msg
     end
     params = { method: :get, url: entry_point, headers: { params: @param } }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute params
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
-    posts = []
-    ret['updatePost'].each do |post|
-      pages.push(GrowiPage.new(post))
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return GApiReturn.new(ok: ret['ok'], data: posts)
+
+    begin
+      posts = []
+      ret['updatePost'].each do |post|
+        pages.push(GrowiPage.new(post))
+      end
+      return GApiReturn.new(ok: ret['ok'], data: posts)
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Fail to parse: #{e}"
+    end
   end
 
 protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:path]) 
-      return CPInvalidRequest.new 'Parameter path required.'
+      return GCInvalidRequest.new 'Parameter path required.'
     end
   end
 
@@ -398,11 +508,23 @@ class GApiRequestPagesRemove < GApiRequestBase
     if invalid?
       return validation_msg
     end
+
     param = { method: :get, url: entry_point, headers: { params: @param } }.merge(rest_client_param)
-    ret = JSON.parse RestClient::Request.execute param
-    if (ret['ok'] == false)
-      return CPInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    GCLogger.logger.debug('Request: ' + params.to_s)
+
+    begin
+      raw_ret = RestClient::Request.execute params
+      GCLogger.logger.debug('Return: ' + raw_ret.to_s)
+      ret = JSON.parse raw_ret
+    rescue Exception => e
+      GCLogger.logger.error(e)
+      return GCInvalidRequest.new "Unknown error occured: #{e}"
     end
+
+    if (!ret['ok'].nil? && ret['ok'] == false)
+      return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
+    end
+
     return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
   end
 
@@ -410,10 +532,10 @@ protected
 
   # バリデーションエラーを取得する
   # @override
-  # @return [nil/CPInvalidRequest] バリデーションエラー結果
+  # @return [nil/GCInvalidRequest] バリデーションエラー結果
   def _invalid
     if ! (@param[:page_id] || @param[:revision_id]) 
-      return CPInvalidRequest.new 'Parameter page_id or revision_id is required.'
+      return GCInvalidRequest.new 'Parameter page_id or revision_id is required.'
     end
   end
 

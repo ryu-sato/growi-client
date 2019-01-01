@@ -14,13 +14,12 @@ class GrowiPageRevision < GrowiModelBase
     }
 
     params = init_params.merge(params.map { |k,v| [k.to_sym, v] }.to_h)
-    if (params[:_id] == nil ||  params[:path] == nil)
-      raise ArgumentError.new('Parameters _id and path are required.')
+    if (params[:_id].nil?)
+      raise ArgumentError.new('Parameter _id is required.')
     end
 
     GrowiModelFactory.instance.register({
-      page_revision_createdAt: Proc.new { |date_str|
-                                          date_str != nil && DateTime.parse(date_str) },
+      page_revision_createdAt: Proc.new { |date_str| !date_str.nil? && date_str != "" ? DateTime.parse(date_str) : "" },
     })
     maked_params = {}
     params.each do |k,v|

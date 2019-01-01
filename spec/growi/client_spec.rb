@@ -8,14 +8,14 @@ RSpec.describe Growi::Client do
   let(:growi_client)   { GrowiClient.new(growi_url: ENV['GROWI_URL'],
                                          access_token: ENV['GROWI_ACCESS_TOKEN']) }
 
-  describe '# GrowiClient\'s basic attributes and methods :' do
+  describe 'GrowiClient\'s basic attributes and methods :' do
     # Test for VERSION
     it "check version number is exist" do
       expect(Growi::Client::VERSION).not_to be nil
     end
   end
 
-  describe '# API related Growi pages :' do
+  describe 'API related Growi pages :' do
     # Test for function to get page list
     it "get list of page" do
       req = GApiRequestPagesList.new path_exp: '/'
@@ -54,12 +54,15 @@ RSpec.describe Growi::Client do
     it "update page" do
       test_cases = [nil, GrowiPage::GRANT_PUBLIC, GrowiPage::GRANT_RESTRICTED,
                     GrowiPage::GRANT_SPECIFIED, GrowiPage::GRANT_OWNER]
-      page_id = growi_client.page_id(path_exp: test_page_path)
-  
+
       body = "# growi-client\n"
       test_cases.each do |grant| 
+        # get page specified path
+        req = GApiRequestPagesGet.new path: test_page_path
+        ret = growi_client.request(req)
+
         body = body + grant.to_s
-        req = GApiRequestPagesUpdate.new page_id: page_id,
+        req = GApiRequestPagesUpdate.new page_id: ret.data._id, revision_id: ret.data.revision._id,
                 body: body, grant: grant
         expect(growi_client.request(req).ok).to eq true
       end
