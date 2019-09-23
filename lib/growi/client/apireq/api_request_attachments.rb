@@ -78,7 +78,11 @@ class GApiRequestAttachmentsAdd < GApiRequestBase
     if (ret['ok'] == false)
       return GCInvalidRequest.new "API return false with msg: #{ret['msg']}"
     end
-    return GApiReturn.new(ok: ret['ok'], data: GrowiPage.new(ret['page']))
+    data = {
+      page: GrowiPage.new(ret['page']),
+      attachment: GrowiAttachment.new(ret['attachment'])
+    }
+    return GApiReturn.new(ok: ret['ok'], data: data)
   end
 
 protected
