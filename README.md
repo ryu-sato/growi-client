@@ -4,6 +4,8 @@
 
 A client of growi with use API.
 
+see GROWI API document https://docs.growi.org/api/.
+
 ## Compatibility
 
 growi-client is passed the test of these Growi versions.
