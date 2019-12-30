@@ -286,10 +286,24 @@ class GApiRequestPagesSeen < GApiRequestBase
     end
 
     begin
-      users = ret['seenUser'].map do |user|
-        user.is_a?(String) ? user : GrowiUser.new(user)
+      if ret['seenUser'].is_a?(Hash)
+        %w[grantedUsers seenUsers].map do |user_list_attr|
+          next if ret['seenUser'][user_list_attr].nil?
+
+          ret['seenUser'][user_list_attr] = ret['seenUser'][user_list_attr].map do |user|
+            user.is_a?(String) ? user : GrowiUser.new(user)
+          end
+        end
+        
+        %w[creator lastUpdateUser].map do |user_attr|
+          user = ret['seenUser'][user_attr]
+          next if user.nil?
+
+          ret['seenUser'][user_attr] = user.is_a?(String) ? user : GrowiUser.new(user)
+        end
       end
-      return GApiReturn.new(ok: ret['ok'], data: users)
+
+      return GApiReturn.new(ok: ret['ok'], data: ret['seenUser'])
     rescue Exception => e
       GCLogger.logger.error(e)
       return GCInvalidRequest.new "Fail to parse: #{e}"
@@ -461,11 +475,7 @@ class GApiRequestPagesUpdatePost < GApiRequestBase
     end
 
     begin
-      posts = []
-      ret['updatePost'].each do |post|
-        pages.push(GrowiPage.new(post))
-      end
-      return GApiReturn.new(ok: ret['ok'], data: posts)
+      return GApiReturn.new(ok: ret['ok'], data: ret['updatePost'])
     rescue Exception => e
       GCLogger.logger.error(e)
       return GCInvalidRequest.new "Fail to parse: #{e}"
