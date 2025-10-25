@@ -1,3 +1,8 @@
+> [!WARNING]
+> 
+> 公式SDKを参照 https://github.com/growilabs/growi-sdk-typescript
+
+
 [![wercker status](https://app.wercker.com/status/837aadfe3b9e25cf5aacd36ae2bdc6a4/s/master "wercker status")](https://app.wercker.com/project/byKey/837aadfe3b9e25cf5aacd36ae2bdc6a4)
 
 # growi-client -- client of growi with use API
